@@ -31,7 +31,7 @@ jobs:
           # Ensure wget is installed (usually pre-installed on Ubuntu runners)
           wget --version
           # Mirror the entire website to the root of the ./site directory
-          wget --mirror --no-parent --convert-links --adjust-extension --page-requisites --no-clobber https://minex.speedslicer.dev/ -P ./site
+          wget --mirror --no-parent --convert-links --adjust-extension --page-requisites --no-clobber --base=./ https://minex.speedslicer.dev/ -P ./site
           # Move the content to the root directory
           mv ./site/minex.speedslicer.dev/* ./
           mv ./site/minex.speedslicer.dev/.* ./ || true  # Move hidden files if any

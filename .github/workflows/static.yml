@@ -30,13 +30,16 @@ jobs:
         run: |
           # Ensure wget is installed (usually pre-installed on Ubuntu runners)
           wget --version
-          # Mirror the entire website
+          # Mirror the entire website to the root of the ./site directory
           wget --mirror --no-parent --convert-links --adjust-extension --page-requisites --no-clobber https://minex.speedslicer.dev/ -P ./site
+          # Move the content to the root directory
+          mv ./site/minex.speedslicer.dev/* ./
+          mv ./site/minex.speedslicer.dev/.* ./ || true  # Move hidden files if any
 
       - name: List directory contents
         run: |
           # List contents of the site directory for debugging
-          ls -R ./site
+          ls -R ./
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -44,7 +47,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './site' # Ensure the correct directory is being uploaded
+          path: './' # Ensure the correct directory is being uploaded
 
       - name: Deploy to GitHub Pages
         id: deployment

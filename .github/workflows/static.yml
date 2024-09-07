@@ -32,6 +32,7 @@ jobs:
           wget --version
           # Mirror the entire website to the root of the ./site directory
           wget --mirror --no-parent --convert-links --adjust-extension --page-requisites --no-clobber --base=./ https://minex.speedslicer.dev/ -P ./site
+          find ./site -type f -exec sed -i 's|/resources|/actionevil/resources|g' {} +
           # Move the content to the root directory
           mv ./site/minex.speedslicer.dev/* ./
           mv ./site/minex.speedslicer.dev/.* ./ || true  # Move hidden files if any

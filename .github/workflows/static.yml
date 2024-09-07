@@ -49,6 +49,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Verify Deployment URL
-        run: echo "Deployment URL: ${{ steps.deployment.outputs.page_url }}"

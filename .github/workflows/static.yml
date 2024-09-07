@@ -1,14 +1,9 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-  # Schedule to run every 2 days at midnight UTC
   schedule:
     - cron: '0 0 */2 * *'
 
@@ -28,14 +23,20 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install wget
-        run: sudo apt-get install wget
-
       - name: Mirror Website
-        run: wget --mirror https://minex.speedslicer.dev/ -P ./site
+        run: |
+          # Ensure wget is installed (usually pre-installed on Ubuntu runners)
+          wget --version
+          # Mirror the entire website
+          wget --mirror --no-parent --convert-links --adjust-extension --page-requisites --no-clobber https://minex.speedslicer.dev/ -P ./site
+
+      - name: List directory contents
+        run: |
+          # List contents of the site directory for debugging
+          ls -R ./site
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -43,8 +44,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './site'
+          path: './site' # Ensure the correct directory is being uploaded
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify Deployment URL
+        run: echo "Deployment URL: ${{ steps.deployment.outputs.page_url }}"
